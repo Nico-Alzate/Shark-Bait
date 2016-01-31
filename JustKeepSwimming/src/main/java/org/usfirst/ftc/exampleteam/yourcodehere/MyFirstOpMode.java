@@ -13,8 +13,8 @@ import org.swerverobotics.library.interfaces.*;
 public class MyFirstOpMode extends SynchronousOpMode
     {
     /* Declare here any fields you might find useful. */
-    // DcMotor motorLeft = null;
-    // DcMotor motorRight = null;
+    // DcMotor treadMotorLeft = null;
+    // DcMotor treadMotorRight = null;
 
     @Override public void main() throws InterruptedException
         {
@@ -22,8 +22,8 @@ public class MyFirstOpMode extends SynchronousOpMode
          * to 'get' must correspond to the names you assigned during the robot configuration
          * step you did in the FTC Robot Controller app on the phone.
          */
-        // this.motorLeft = this.hardwareMap.dcMotor.get("motorLeft");
-        // this.motorRight = this.hardwareMap.dcMotor.get("motorRight");
+        // this.treadMotorLeft = this.hardwareMap.dcMotor.get("treadMotorLeft");
+        // this.treadMotorRight = this.hardwareMap.dcMotor.get("treadMotorRight");
 
         // Wait for the game to start
         waitForStart();
