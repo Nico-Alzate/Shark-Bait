@@ -30,11 +30,11 @@ public class TutorialTeleOp extends SynchronousOpMode {
          * to 'get' must correspond to the names you assigned during the robot configuration
          * step you did in the FTC Robot Controller app on the phone.
          */
-        this.treadMotorLeft = this.hardwareMap.dcMotor.get("treadMotorLeft");
-        this.treadMotorRight = this.hardwareMap.dcMotor.get("treadMotorRight");
-        this.tapeExtendLeft = this.hardwareMap.dcMotor.get("tapeExtendLeft");
-        this.tapeExtendRight = this.hardwareMap.dcMotor.get("tapeExtendRight");
-        this.tapeAngle = this.hardwareMap.servo.get("tapeAngle");
+        treadMotorLeft = hardwareMap.dcMotor.get("treadMotorLeft");
+        treadMotorRight = hardwareMap.dcMotor.get("treadMotorRight");
+        tapeExtendLeft = hardwareMap.dcMotor.get("tapeExtendLeft");
+        tapeExtendRight = hardwareMap.dcMotor.get("tapeExtendRight");
+        tapeAngle = hardwareMap.servo.get("tapeAngle");
 
         treadMotorLeft.setMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
         treadMotorRight.setMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
@@ -46,6 +46,8 @@ public class TutorialTeleOp extends SynchronousOpMode {
 
         tapeAngle.setPosition(tapeAngle_min);
 
+
+
         // Wait for the game to start
         waitForStart();
 
@@ -54,27 +56,51 @@ public class TutorialTeleOp extends SynchronousOpMode {
         {
             if (updateGamepads())
             {
-                // The game pad state has changed. Do something with that!
-                treadMotorLeft.setPower(gamepad1.left_stick_y);
-                treadMotorRight.setPower(gamepad1.right_stick_y);
-
-                double newPosition = tapeAngle.getPosition();
-                if (gamepad1.a) {
-                    newPosition = tapeAngle.getPosition() + tapeAngle_increment;
-                } else if (gamepad1.b) {
-                    newPosition = tapeAngle.getPosition() - tapeAngle_increment;
-                }
-                if (newPosition < tapeAngle_min) {
-                    newPosition = tapeAngle_min;
-                }
-                if (newPosition > tapeAngle_max) {
-                    newPosition = tapeAngle_max;
-                }
-                tapeAngle.setPosition(newPosition);
+                controlTheTreads();
+                controlTheTapeAngle();
+                controlTheTapeExtend();
             }
 
             telemetry.update();
             idle();
         }
+    }
+
+    private void controlTheTreads() {
+        treadMotorLeft.setPower(gamepad1.left_stick_y);
+        treadMotorRight.setPower(gamepad1.right_stick_y);
+    }
+
+    private void controlTheTapeExtend() {
+        // when you press y, make the motors go forward, max power
+        // when you press x, make the motors go backward, max power
+        // when you press nothing, stop the motors.
+
+        if (gamepad1.y) {
+            tapeExtendLeft.setPower(1.0);
+            tapeExtendRight.setPower(1.0);
+        } else if (gamepad1.x) {
+            tapeExtendLeft.setPower(-1.0);
+            tapeExtendRight.setPower(-1.0);
+        } else {
+            tapeExtendLeft.setPower(0.0);
+            tapeExtendRight.setPower(0.0);
+        }
+    }
+
+    private void controlTheTapeAngle() {
+        double newPosition = tapeAngle.getPosition();
+        if (gamepad1.a) {
+            newPosition = tapeAngle.getPosition() - tapeAngle_increment;
+        } else if (gamepad1.b) {
+            newPosition = tapeAngle.getPosition() + tapeAngle_increment;
+        }
+        if (newPosition < tapeAngle_min) {
+            newPosition = tapeAngle_min;
+        }
+        if (newPosition > tapeAngle_max) {
+            newPosition = tapeAngle_max;
+        }
+        tapeAngle.setPosition(newPosition);
     }
 }
