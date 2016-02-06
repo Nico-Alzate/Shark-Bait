@@ -1,0 +1,113 @@
+package org.usfirst.ftc.exampleteam.yourcodehere;
+
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorController;
+import com.qualcomm.robotcore.hardware.Servo;
+
+import org.swerverobotics.library.SynchronousOpMode;
+import org.swerverobotics.library.interfaces.Autonomous;
+import org.swerverobotics.library.interfaces.TeleOp;
+
+/**
+ * The Autonomous code for team 10322 for RES-Q 2016 that allows "SharkBait" (our bot) to use a
+ * color senor to push the button at the BRZ and to climb to the mountain mid zone. We thank Swerve
+ * Robotics for the helpful tutorials and all other FTC participants for their assistance!
+ * thank you!
+ * Programmers: Dominique M. "Nico" Alzate, Juliana "Juli" Paton, and Anton Doe.
+ */
+@Autonomous(name="AUTONOMOUS 10322")
+public class AutonomousSharkBait extends SynchronousOpMode
+    {
+    /* Declare here any fields you might find useful. */
+    DcMotor motorLeft = null;
+    DcMotor motorRight = null;
+    DcMotor tapeLeft = null;
+    DcMotor tapeRight = null;
+    Servo angleTape = null;
+
+    @Override public void main() throws InterruptedException
+        {
+        /* Initialize our hardware variables. Note that the strings used here as parameters
+         * to 'get' must correspond to the names you assigned during the robot configuration
+         * step you did in the FTC Robot Controller app on the phone.
+         */
+    //Treads
+    motorLeft = hardwareMap.dcMotor.get("motorLeft");
+    motorRight = hardwareMap.dcMotor.get("motorRight");
+    //Tape Measures
+    tapeLeft = hardwareMap.dcMotor.get("tapeLeft");
+    tapeRight = hardwareMap.dcMotor.get("tapeRight");
+    //Servo angle
+    angleTape = hardwareMap.servo.get("angleTape");
+
+     motorLeft.setChannelMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
+     motorRight.setChannelMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
+     tapeLeft.setChannelMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
+     tapeRight.setChannelMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
+     angleTape.setPosition(0);
+
+            // Wait for the game to start
+            waitForStart();
+
+            public void ForwardDrive (double power) /*Method for driving forward*/
+        {
+            motorLeft.setPower(power);
+            motorRight.setPower(power);
+        }
+            public void RightTurn (double power) /*Method for turning right*/
+        {
+            motorLeft.setPower(power);
+            motorRight.setPower(-power);
+        }
+            public void LeftTurn(double power)
+        {
+            RightTurn(-power);
+        }
+             public void Stop (double power)
+        {
+            ForwardDrive(0);
+        }
+             public void CreateTapeAngleUp()
+        {
+             angleTape.setPosition(.35);
+        }
+             public void ResetTapeAngle()
+        {
+             angleTape.setPosition(0);
+        }
+            public void ExtendTapes (double power)
+        {
+             tapeRight.setPower(power);
+             tapeLeft.setPower(power);
+        }
+            public void RetractTapes (double power)
+        {
+              tapeRight.setPower(-power);
+              tapeLeft.setPower(-power);
+        }
+
+        double motorPower = 1.0;
+
+        {
+            // HOO HAH HAH!
+            ForwardDrive(motorPower);
+            RightTurn(motorPower);
+            ForwardDrive(motorPower);
+            Stop(1);
+            /* Color Sensor Button code to be added*/
+            RightTurn(motorPower);
+            ForwardDrive(motorPower);
+            LeftTurn(motorPower);
+            Stop(1);
+            /*Color Sensor Ramp Positioning to be added*/
+            CreateTapeAngleUp();
+            ExtendTapes(motorPower);
+            /*Simultaneously Retract Tapes while driving up*/
+            RetractTapes(motorPower);
+            ForwardDrive(motorPower);
+
+
+        }
+
+        }
+
